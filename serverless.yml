@@ -20,7 +20,7 @@ frameworkVersion: '2'
 provider:
   name: azure
   region: West US
-  runtime: python3.6 # python3.7 or python3.8 also available
+  runtime: python3.7 # python3.7 or python3.8 also available
   os: linux  # linux is the only operating system available for python
   
 
