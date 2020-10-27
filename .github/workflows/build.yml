@@ -2,13 +2,13 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
-
+    branches: [ main ]
 jobs:
   build: 
     runs-on: ubuntu-latest
+    
     steps:
 
 #Setup Environment
@@ -22,7 +22,6 @@ jobs:
       uses: actions/checkout@v1 
       
 #Set EnvironmSet Environment Variables
-    - name: Set Environment Variables
       run: |
           echo "CG_TOKEN=${{ secrets.CG_TOKEN }}" >> $GITHUB_ENV 
           echo "AZURE_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV 
@@ -30,14 +29,12 @@ jobs:
           echo "AZURE_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $GITHUB_ENV 
           echo "AZURE_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> $GITHUB_ENV 
           
-
 #Install Dependencies      
     - name: Install Relevant Plugins + Dependencies
       run: |
           npm install -g serverless 
           npm i --save serverless-azure-functions
           npm install -D https://artifactory.app.protego.io/cloudguard-serverless-plugin.tgz
-
 #Deploy Function
     - name: Intial Deploy to Azure
       run: |
