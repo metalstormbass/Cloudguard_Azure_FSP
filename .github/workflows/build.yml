@@ -36,10 +36,11 @@ jobs:
       run: |
           npm install -g serverless 
           npm i --save serverless-azure-functions
-          npm install -D https://artifactory.app.protego.io/cloudguard-serverless-plugin.tgz
+          
 #Deploy Function
     - name: Intial Deploy to Azure
       run: |
+         npm install -D https://artifactory.app.protego.io/cloudguard-serverless-plugin.tgz
          cloudguard fsp add -p azure -r python -s ${AZURE_SUBSCRIPTION_ID} -i src\handlers\ -t ${CG_TOKEN}
          sls deploy
       timeout-minutes: 30   
