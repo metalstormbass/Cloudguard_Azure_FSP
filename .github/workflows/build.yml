@@ -2,10 +2,9 @@ name: CI
 
 on:
   push:
-    branches:
-    - master
-    paths:
-    - '_build_flag'
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 jobs:
   build: 
     runs-on: ubuntu-latest
