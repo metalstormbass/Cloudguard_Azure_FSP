@@ -32,6 +32,8 @@ jobs:
 #Install Dependencies      
     - name: Install Relevant Plugins + Dependencies
       run: |
+          npm install -g serverless 
+          npm i --save serverless-azure-functions
           npm install 
           npm install -g https://artifactory.app.protego.io/cloudguard-serverless-plugin.tgz
           
