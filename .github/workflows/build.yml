@@ -39,6 +39,6 @@ jobs:
 #Deploy Function
     - name: Intial Deploy to Azure
       run: |
-         cloudguard fsp add -p azure -r python3.7 -s ${AZURE_SUBSCRIPTION_ID} -i src/handlers -t ${CG_TOKEN}
+         cloudguard fsp add -p azure -r python3.6 -s ${AZURE_SUBSCRIPTION_ID} -i src/handlers -t ${CG_TOKEN}
          sls deploy
       timeout-minutes: 30   
