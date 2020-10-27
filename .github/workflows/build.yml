@@ -1,0 +1,45 @@
+name: 'Build'
+on:
+  push:
+    branches:
+    - master
+    paths:
+    - '_build_flag'
+
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    env:
+      working-directory: .
+      CG_TOKEN: ${{ secrets.CG_TOKEN }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+    
+    steps:
+
+#Setup Environment
+    - name: "Setup Node.js"
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+        
+#Checkout code from repository
+    - name: Checkout Code
+      uses: actions/checkout@v1 
+
+#Install Dependencies      
+    - name: Install Relevant Plugins + Dependencies
+      run: |
+          npm install -g serverless 
+          npm i --save serverless-azure-functions
+          npm install -D https://artifactory.app.protego.io/cloudguard-serverless-plugin.tgz
+#Deploy Function
+    - name: Intial Deploy to Azure
+      run: |
+         cloudguard fsp add -p azure -r python -s ${AZURE_SUBSCRIPTION_ID} -i src\handlers\ -t ${CG_TOKEN}
+         sls deploy
+      timeout-minutes: 30        
+        
+    
