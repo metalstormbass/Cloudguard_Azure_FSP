@@ -99,6 +99,16 @@ functions:
         methods:
           - GET
         authLevel: anonymous
+  
+  cloudguard:
+    handler: src/handlers/Cloudguard/sidecar.main
+    events:
+      - http: true
+        methods:
+          - GET
+          - POST
+        authLevel: function
+  
   # The following are a few examples of other events you can configure:
   # storageBlob:
   #   handler: src/handlers/storageBlob
