@@ -43,7 +43,7 @@ jobs:
         location_lower="$(echo -e "$location_lower" | tr -d '[:space:]')"
        
         az login  --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} -t ${AZURE_TENANT_ID}
-        az functionapp delete --resource-group ${AZ_RG}  --name ${APP_NAME} --yes
+        az functionapp delete --resource-group ${AZ_RG}  --name ${APP_NAME} 
         az storage account delete --name ${STORAGE_NAME}  --resource-group ${AZ_RG} --yes
         az group delete --name ${AZ_RG} --yes
          
