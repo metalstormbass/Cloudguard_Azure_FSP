@@ -1,5 +1,5 @@
 {
-  "name": "cloudguard-azure-function",
+  "name": "cloudguard_azure_fsp",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,10 +9,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "serverless-azure-functions": "^1.0.2-22"
-  },
-  "dependencies": {
-    "i": "^0.3.6",
-    "serverless": "^2.8.0"
+    "serverless-azure-functions": "1.0.2-22"
   }
 }
