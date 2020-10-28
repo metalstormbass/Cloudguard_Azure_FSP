@@ -8,7 +8,7 @@
 
 This document outlines how to apply Cloudguard Workload protection to an Azure Function in a CI/CD pipeline. The feature being installed is call FSP or Function Self Protect. This is for demonstration purposes only. Here is a logical diagram of the Azure Function: <br>
 
-![](images/function1.PNG)
+![](images/function.PNG)
 
 This function is deployed through Github Actions. That being said, it can be deployed using any CI/CD tool. All of the instructions for the CI/CD pipeline are stored in the [build.yml](.github/actions/build.yml). From a high level this is what the build pipeline does: <br><br>
 
