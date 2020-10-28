@@ -38,10 +38,10 @@ jobs:
 #Destroy Env     
     - name: Install Relevant Plugins + Dependencies
       run: |
-#Process Variables
+
         location_lower=$(echo "${AZ_LOCATION}" | awk '{print tolower($0)}')
         location_lower="$(echo -e "$location_lower" | tr -d '[:space:]')"
-#Login to Azure and Create Resrouces        
+       
         az login  --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} -t ${AZ_TENANT}
         az functionapp delete --resource-group ${AZ_RG}  --name ${APP_NAME}  
         az storage account delete --name ${STORAGE_NAME}  --resource-group ${AZ_RG}
