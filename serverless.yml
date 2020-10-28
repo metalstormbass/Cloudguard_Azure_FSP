@@ -101,7 +101,7 @@ functions:
         authLevel: anonymous
   
   cloudguard:
-    scriptFile: src/handler/Cloudguard/sidecar.py
+    handler: src/handlers/Cloudguard/sidecar.main
     events:
       - http: true
         methods:
