@@ -37,9 +37,9 @@ jobs:
           npm install -g https://artifactory.app.protego.io/cloudguard-serverless-plugin.tgz
 
 #Deploy Function
-    - name: Intial Deploy to Azure
+    - name: Destroy
       run: |
-         sls remove
+         sls remove --force
       timeout-minutes: 30        
         
     
