@@ -21,7 +21,7 @@ provider:
   name: azure
   region: West US
   runtime: python3.6 # python3.7 or python3.8 also available
-  os: linux  # linux is the only operating system available for python
+  #os: linux  # linux is the only operating system available for python
   
 
 plugins: # look for additional plugins in the community plugins repo: https://github.com/serverless/plugins
