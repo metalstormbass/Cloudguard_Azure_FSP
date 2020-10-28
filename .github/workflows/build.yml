@@ -43,7 +43,7 @@ jobs:
 #Create Azure Resource Group, Storage Account 
     - name: Configure Azure Environment
       run: |
-#Process Variables
+
          location_lower=$(echo "${AZ_LOCATION}" | awk '{print tolower($0)}')
          location_lower="$(echo -e "$location_lower" | tr -d '[:space:]')"
 #Login to Azure and Create Resrouces        
