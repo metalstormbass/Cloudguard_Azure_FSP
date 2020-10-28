@@ -84,7 +84,4 @@ jobs:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
         package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/src'
 
-#Output
-    - name: Output
-      run: |
-        az functionapp show --name ${APP_NAME} --resource-group ${AZ_RG}
+

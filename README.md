@@ -10,7 +10,7 @@ This document outlines how to apply Cloudguard Workload protection to an Azure F
 
 ![](images/function1.PNG)
 
-This function is deployed through Github Actions. That being said, it can be deployed using and CI/CD tool. All of the instructions for the CI/CD pipeline are stored in the [build.yml](.github/actions/build.yml). From a high level this is what the build pipeline does: <br><br>
+This function is deployed through Github Actions. That being said, it can be deployed using any CI/CD tool. All of the instructions for the CI/CD pipeline are stored in the [build.yml](.github/actions/build.yml). From a high level this is what the build pipeline does: <br><br>
 
 1. Configure Runner Environment <br>
 2. Set up Azure Resource Group, Storage Container and Function App <br>
@@ -45,7 +45,7 @@ Create an App Registration in Azure. As this will be used multiple times, please
 - Secret <br>
 - Subscription ID <br>
 
-Ensure that you give this app registration "Contributor" permission. This is required for Terraform to build the environment.
+Ensure that you give this app registration "Contributor" permission. 
 
 ## Prep the Github Environment
 
@@ -68,7 +68,54 @@ Second, select the "Actions" tab and enable workflows.
 
 ## Run the Build
 
-To deploy this function to Azure, modify the _build_flag and commit the changes. This kicks off the Github Action which deploys the function. Once the build is finished, you will then see it in Check Point CSPM<br>
+To deploy this function to Azure, modify the _build_flag and commit the changes. This kicks off the Github Action pipeline. Once the build is finished, you will then see it in Check Point CSPM<br>
 
 ![](images/build.PNG)
 
+### Sync to Check Point CSPM
+
+Depending on when you build your function in relation to the sync interval it may take some time for the information to appear. If you would like to force this synchronization, you can run the following command: <br><br>
+
+```
+curl -X POST https://api.dome9.com/v2/AzureCloudAccount/<CLOUDGUARD_ID_FOR_AZURE>/SyncNow --basic -u <DOME9_API_KEY>:<DOME_SECRET> -H 'Accept: application/json'
+```
+
+## Check Point CSPM
+
+Open Check Point CSPM and navigate to the "Serverless" option. Select "Serverless Assets" and click on the function you created. This is what you will see: <br><br>
+![](images/function2.PNG)
+
+## Testing the function
+
+First, grab the URL of your function. <br><br>
+![](images/azure1.PNG)
+
+
+To test the function, navigate back to the /scripts directory and run activity.py.
+
+```
+λ python scripts\activity.py
+Target: <APP URL>
+Select 1 for Bening Input and 2 for Malicious Input: 1
+b'Hello, Cloudguard Workload. This HTTP triggered function executed successfully.'
+
+```
+
+
+### Malicious Input
+
+You can also test putting in malicious input. Here is an example:
+
+```
+λ python scripts\activity.py
+Target: <APP URL>
+Select 1 for Bening Input and 2 for Malicious Input: 2
+b'This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.'
+```
+
+At this point, since this product is still in EA, it only has detection capabilities. Blocking capabilities are comming soon!
+
+
+## Cleanup
+
+To delete the environment, modify the _destroy_flag and commit the changes. This will delete everything that was created.
