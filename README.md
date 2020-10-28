@@ -113,6 +113,8 @@ Select 1 for Bening Input and 2 for Malicious Input: 2
 b'This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.'
 ```
 
+![](images/alert.PNG)
+
 At this point, since this product is still in EA, it only has detection capabilities. Blocking capabilities are comming soon!
 
 
