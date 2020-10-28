@@ -7,7 +7,7 @@ on:
     - '_destroy_flag'
 
 jobs:
-  build: 
+  destroy: 
     runs-on: ubuntu-latest
     env:
       working-directory: .
