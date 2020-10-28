@@ -38,7 +38,7 @@ jobs:
 #Install Dependencies      
     - name: Install Relevant Plugins + Dependencies
       run: |
-          npm install -g https://artifactory.app.protego.io/cloudguard-serverless-plugin.tgz
+         npm install -g https://artifactory.app.protego.io/cloudguard-serverless-plugin.tgz
           
 #Create Azure Resource Group, Storage Account 
     - name: Configure Azure Environment
