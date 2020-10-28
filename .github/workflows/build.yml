@@ -46,7 +46,7 @@ jobs:
 
          location_lower=$(echo "${AZ_LOCATION}" | awk '{print tolower($0)}')
          location_lower="$(echo -e "$location_lower" | tr -d '[:space:]')"
-#Login to Azure and Create Resrouces        
+       
          az login  --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} -t ${AZ_TENANT}
          az group create --name ${AZ_RG} --location ${AZ_LOCATION}
          
