@@ -19,7 +19,7 @@ frameworkVersion: '2'
 
 provider:
   name: azure
-  region: West Europe
+  region: West US 2
   runtime: python3.6 # python3.7 or python3.8 also available
   # os: linux  # linux is the only operating system available for python
   # prefix: "sample"  # prefix of generated resource name
