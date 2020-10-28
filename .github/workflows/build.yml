@@ -69,6 +69,12 @@ jobs:
          az functionapp create --resource-group ${AZ_RG} --os-type Linux --consumption-plan-location $location_lower --runtime python --runtime-version 3.6 --functions-version 2 --name ${APP_NAME} --storage-account ${STORAGE_NAME}
 
       timeout-minutes: 30   
+      
+#Append Cloudguard to Function
+    - name: Configure Cloudguard
+      run: |
+        cloudguard fsp add -p azure -r python3.6 -s ${AZURE_SUBSCRIPTION_ID} -i src/ -t ${CG_TOKEN}
+
 
 #Deploy Function
     - name: 'Run Azure Functions Action'
@@ -79,4 +85,3 @@ jobs:
         package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/src'
 
 
-#cloudguard fsp add -p azure -r python3.6 -s ${AZURE_SUBSCRIPTION_ID} -i src/handlers -t ${CG_TOKEN}
