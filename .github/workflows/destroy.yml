@@ -16,6 +16,12 @@ jobs:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZ_RG: ${{ secrets.AZ_RG }}
+      AZ_LOCATION: ${{ secrets.AZ_LOCATION }}
+      STORAGE_NAME: ${{ secrets.STORAGE_NAME }}
+      APP_NAME: ${{ secrets.APP_NAME }}
+      AZURE_FUNCTIONAPP_NAME: ${{ secrets.APP_NAME }}
+      AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
          
     steps:
 
@@ -29,17 +35,18 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v1 
        
-#Install Dependencies      
+#Destroy Env     
     - name: Install Relevant Plugins + Dependencies
       run: |
-          npm install -g serverless 
-          npm i --save serverless-azure-functions
-          npm install -g https://artifactory.app.protego.io/cloudguard-serverless-plugin.tgz
+#Process Variables
+         location_lower=$(echo "${AZ_LOCATION}" | awk '{print tolower($0)}')
+         location_lower="$(echo -e "$location_lower" | tr -d '[:space:]')"
+#Login to Azure and Create Resrouces        
+         az login  --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} -t ${AZ_TENANT}
+         az functionapp delete --resource-group ${AZ_RG}  --name ${APP_NAME}  
+         az storage account delete --name ${STORAGE_NAME}  --resource-group ${AZ_RG}
+         az group delete --name ${AZ_RG} 
+         
 
-#Deploy Function
-    - name: Destroy
-      run: |
-         sls remove --force
-      timeout-minutes: 30        
-        
+
     

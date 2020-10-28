@@ -16,6 +16,12 @@ jobs:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZ_RG: ${{ secrets.AZ_RG }}
+      AZ_LOCATION: ${{ secrets.AZ_LOCATION }}
+      STORAGE_NAME: ${{ secrets.STORAGE_NAME }}
+      APP_NAME: ${{ secrets.APP_NAME }}
+      AZURE_FUNCTIONAPP_NAME: ${{ secrets.APP_NAME }}
+      AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
          
     steps:
 
@@ -32,13 +38,31 @@ jobs:
 #Install Dependencies      
     - name: Install Relevant Plugins + Dependencies
       run: |
-          npm install -g serverless 
-          npm install 
           npm install -g https://artifactory.app.protego.io/cloudguard-serverless-plugin.tgz
           
-#Deploy Function
-    - name: Intial Deploy to Azure
+#Create Azure Resource Group, Storage Account 
+    - name: Configure Azure Environment
       run: |
-         cloudguard fsp add -p azure -r python3.6 -s ${AZURE_SUBSCRIPTION_ID} -i src/handlers -t ${CG_TOKEN}
-         sls deploy
+#Process Variables
+         location_lower=$(echo "${AZ_LOCATION}" | awk '{print tolower($0)}')
+         location_lower="$(echo -e "$location_lower" | tr -d '[:space:]')"
+#Login to Azure and Create Resrouces        
+         az login  --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} -t ${AZ_TENANT}
+         az group create --name ${AZ_RG} --location ${AZ_LOCATION}
+         
+         az storage account create --name ${STORAGE_NAME} --location $location_lower --resource-group ${AZ_RG} --sku Standard_LRS
+         
+         az functionapp create --resource-group ${AZ_RG} --os-type Linux --consumption-plan-location $location_lower --runtime python --runtime-version 3.6 --functions-version 2 --name ${APP_NAME} --storage-account ${STORAGE_NAME}
+
       timeout-minutes: 30   
+
+#Deploy Function
+#    - name: 'Run Azure Functions Action'
+#      uses: Azure/functions-action@v1
+#      id: fa
+#      with:
+#        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+#        package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+#        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+
+#cloudguard fsp add -p azure -r python3.6 -s ${AZURE_SUBSCRIPTION_ID} -i src/handlers -t ${CG_TOKEN}
