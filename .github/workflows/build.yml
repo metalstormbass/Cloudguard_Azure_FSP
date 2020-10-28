@@ -44,11 +44,11 @@ jobs:
     - name: Configure Azure Environment
       run: |
 
-         location_lower=$(echo "${AZ_LOCATION}" | awk '{print tolower($0)}')
-         location_lower="$(echo -e "$location_lower" | tr -d '[:space:]')"
+         echo ::set-env name=location_lower::=$(echo "${AZ_LOCATION}" | awk '{print tolower($0)}')
+         echo ::set-env name=location_lower::$(echo -e "${location_lower}" | tr -d '[:space:]')
        
          az login  --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} -t ${AZURE_TENANT_ID}
-         az group create -n ${AZ_RG} -l $location_lower
+         az group create -n ${AZ_RG} -l ${location_lower}
          
          az storage account create --name ${STORAGE_NAME} --location $location_lower --resource-group ${AZ_RG} --sku Standard_LRS
          
