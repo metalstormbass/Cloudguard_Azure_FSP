@@ -22,6 +22,7 @@ jobs:
       APP_NAME: ${{ secrets.APP_NAME }}
       AZURE_FUNCTIONAPP_NAME: ${{ secrets.APP_NAME }}
       AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
+      PYTHON_VERSION: '3.6'
          
     steps:
 
@@ -31,9 +32,22 @@ jobs:
       with:
         node-version: 12.x
         
+    - name: Setup Python ${{ env.PYTHON_VERSION }} Environment
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
 #Checkout code from repository
     - name: Checkout Code
       uses: actions/checkout@v1 
+      
+    - name: 'Resolve Project Dependencies Using Pip'
+      shell: bash
+      run: |
+        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt --target=".python_packages/lib/site-packages"
+        popd
        
 #Install Dependencies      
     - name: Install Relevant Plugins + Dependencies
@@ -57,12 +71,12 @@ jobs:
       timeout-minutes: 30   
 
 #Deploy Function
-#    - name: 'Run Azure Functions Action'
-#      uses: Azure/functions-action@v1
-#      id: fa
-#      with:
-#        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-#        package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-#        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+    - name: 'Run Azure Functions Action'
+      uses: Azure/functions-action@v1
+      id: fa
+      with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/src'
+
 
 #cloudguard fsp add -p azure -r python3.6 -s ${AZURE_SUBSCRIPTION_ID} -i src/handlers -t ${CG_TOKEN}
